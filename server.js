@@ -303,3 +303,5 @@ async function iniciar() {
 }
 
 iniciar();
+
+// MongoDB conectado

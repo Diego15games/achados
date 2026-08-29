@@ -11,6 +11,12 @@ if(!MONGODB_URI){console.error("MONGODB_URI não configurada");process.exit(1)}
 if(!ADMIN_KEY){console.error("ADMIN_KEY não configurada");process.exit(1)}
 const client=new MongoClient(MONGODB_URI);let db;
 function adminAuth(req,res,next){if(req.headers["x-admin-key"]!==ADMIN_KEY)return res.status(401).json({erro:"Não autorizado."});next()}
+
+app.post("/api/admin/login",(req,res)=>{
+  const { key } = req.body || {};
+  if (key !== ADMIN_KEY) return res.status(401).json({erro:"Chave de administrador incorreta."});
+  res.json({ok:true,mensagem:"Login autorizado."});
+});
 async function conectar(){await client.connect();db=client.db("achadinhos");await db.collection("categorias").createIndex({nome:1},{unique:true});console.log("MongoDB conectado com sucesso!");console.log("Banco de dados pronto!")}
 app.get("/",(req,res)=>res.json({status:"online",mensagem:"API Achadinhos funcionando!",mongodb:db?"conectado":"desconectado"}));
 app.get("/api/categorias",async(req,res)=>{try{res.json(await db.collection("categorias").find({}).sort({nome:1}).toArray())}catch(e){res.status(500).json({erro:"Erro ao buscar categorias."})}});

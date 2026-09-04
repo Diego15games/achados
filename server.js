@@ -181,9 +181,17 @@ app.get("/api/produtos/:id", async (req, res) => {
 app.post("/api/produtos", adminAuth, async (req, res) => {
   try {
     const {
-      nome, categoria, preco, imagem, imagens,
-      descricao, especificacoes, linkAmazon, etiqueta
-    } = req.body;
+  nome,
+  categoria,
+  preco,
+  imagem,
+  imagens,
+  descricao,
+  especificacoes,
+  linkAmazon,
+  etiqueta,
+  destaque
+} = req.body;
 
     if (!nome || !imagem || !linkAmazon) {
       return res.status(400).json({
@@ -201,6 +209,7 @@ app.post("/api/produtos", adminAuth, async (req, res) => {
       especificacoes: especificacoes || "",
       linkAmazon: linkAmazon.trim(),
       etiqueta: etiqueta || "",
+      destaque: destaque === true,
       criadoEm: new Date(),
       atualizadoEm: new Date()
     };
